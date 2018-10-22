@@ -8,6 +8,8 @@ const createEntityHashMap = (hashMap, file) => {
     file.entities.forEach(entity => {
         hashMap[entity.entity_id] = entity;
     })
+
+    return hashMap;
 }
 
 const findEntity = (entitiesHash, id) => {
@@ -41,6 +43,8 @@ const addEntityToFile = (file, clone) => {
 
     // Add entity clone to entities array
     file.entities.push(clone);
+
+    return file;
 };
 
 const cloneEntity = (file, entitiesHash, id) => {
@@ -50,6 +54,8 @@ const cloneEntity = (file, entitiesHash, id) => {
     if (!id) throw "Missing ID";
 
     addEntityToFile(file, createEntityClone(findEntity(entitiesHash, id)));
+
+    return file;
 }
 
 const convertToJson = (file) => {

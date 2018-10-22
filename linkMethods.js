@@ -14,6 +14,8 @@ const findLinkedEntities = (file, id, hashSet) => {
       findLinkedEntities(file, link.to, hashSet);
     }
   });
+
+  return hashSet;
 };
 
 const cloneLinkedEntities = (hashSet, entitiesHash, file) => {
