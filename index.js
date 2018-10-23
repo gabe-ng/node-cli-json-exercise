@@ -35,7 +35,7 @@ const main = file => {
         Entities.createEntityHashMap(storedEntities, parsedFile);
 
         // Find all entities linked to the initial given Id and store in a hash set to prevent duplicates
-        Links.findLinkedEntities(parsedFile, entityIdToSearch, linkedEntityIds);
+        Links.createLinkedEntitiesHashSet(parsedFile, entityIdToSearch, linkedEntityIds);
 
         // Clone all linked entities whose Ids exist in the hash set and add to file entities array
         Links.cloneLinkedEntities(linkedEntityIds, storedEntities, parsedFile);
@@ -43,13 +43,13 @@ const main = file => {
         // Create the new links and add to file links array
         Links.createLinks(entityIdToSearch, parsedFile, linkedEntityIds);
 
-        // console.log("Parsed File", parsedFile);
+        console.log("Parsed File", parsedFile);
 
         // Return file parsed back into JSON format
         Entities.convertToJson(parsedFile);
         console.timeEnd("test");
     })
-    // console.timeEnd("test");
 }
     
 main(file);
+// console.log(main(file));

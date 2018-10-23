@@ -1,6 +1,6 @@
 const Entities = require("./entityMethods");
 
-const findLinkedEntities = (file, id, hashSet) => {
+const createLinkedEntitiesHashSet = (file, id, hashSet) => {
   // Find all links associated with initial Id as "from"
   let foundLinks = file.links.filter(link => link.from == id);
 
@@ -11,7 +11,7 @@ const findLinkedEntities = (file, id, hashSet) => {
   foundLinks.forEach(link => {
     if (!hashSet.has(link.to)) {
       hashSet.add(link.to);
-      findLinkedEntities(file, link.to, hashSet);
+      createLinkedEntitiesHashSet(file, link.to, hashSet);
     }
   });
 
@@ -22,10 +22,15 @@ const cloneLinkedEntities = (hashSet, entitiesHash, file) => {
     hashSet.forEach((id) => {
         Entities.cloneEntity(file, entitiesHash, id);
     })
+
+    return hashSet;
 }
 
 const createNewLink = (link, both) => {
     // Both is a boolean stating whether both the "to" and "from" should be incremented
+
+    // Handle missing link
+    if (!link) throw "Missing link";
 
     let newLink = { ...link };
     newLink.to += 10000;
@@ -47,10 +52,11 @@ const createLinks = (id, file, hashSet) => {
         }  
     }
     // console.log("File Links", file.links)
+    return file;
 }
 
 module.exports = {
-    findLinkedEntities: findLinkedEntities,
+    createLinkedEntitiesHashSet: createLinkedEntitiesHashSet,
     cloneLinkedEntities: cloneLinkedEntities,
     createNewLink: createNewLink,
     createLinks: createLinks,

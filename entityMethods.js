@@ -20,7 +20,11 @@ const findEntity = (entitiesHash, id) => {
     // Find entity via entity hash map
     let foundEntity = entitiesHash[id];
 
-    return foundEntity;
+    if (foundEntity) {
+        return foundEntity;
+    } else {
+        throw "Entity ID is invalid";
+    }
 };
 
 const createEntityClone = entity => {
