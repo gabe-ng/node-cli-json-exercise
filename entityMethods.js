@@ -1,7 +1,7 @@
 const createEntityHashMap = (hashMap, file) => {
-    // Handle invalid inputs
-    if (!hashMap) throw "Missing entity hash map";
-    if (!file) throw "Missing file";
+    // Handle missing inputs
+    if (!hashMap) throw "Create hashmap error: Missing entity hash map";
+    if (!file) throw "Create hashmap error: Missing file";
 
     // Loop through file entities array and create keys in the hash map 
     // corresponding to the entity ID and the value equal to the whole entity
@@ -13,9 +13,9 @@ const createEntityHashMap = (hashMap, file) => {
 }
 
 const findEntity = (entitiesHash, id) => {
-    // Handle invalid inputs
-    if (!entitiesHash) throw "Missing entity list";
-    if (!id) throw "Missing ID";
+    // Handle missing inputs
+    if (!entitiesHash) throw "Find entity error: Missing entity list";
+    if (!id) throw "Find entity error: Missing ID";
 
     // Find entity via entity hash map
     let foundEntity = entitiesHash[id];
@@ -28,8 +28,8 @@ const findEntity = (entitiesHash, id) => {
 };
 
 const createEntityClone = entity => {
-    //  Hanlde invalid entity
-    if (!entity) throw "Missing entity";
+    //  Hanlde missing entity
+    if (!entity) throw "Create clone error: Missing entity";
 
     // Create a clone of the initial entity
     let entityClone = { ...entity };
@@ -41,9 +41,9 @@ const createEntityClone = entity => {
 };
 
 const addEntityToFile = (file, clone) => {
-    // Hanlde invalid inputs
-    if (!file) throw "Missing file";
-    if (!clone) throw "Missing clone";
+    // Hanlde missing inputs
+    if (!file) throw "Append entity error: Missing file";
+    if (!clone) throw "Append entity error: Missing clone";
 
     // Add entity clone to entities array
     file.entities.push(clone);
@@ -52,24 +52,38 @@ const addEntityToFile = (file, clone) => {
 };
 
 const cloneEntity = (file, entitiesHash, id) => {
-    // Handle invalid inputs
-    if (!file) throw "Missing file";
-    if (!entitiesHash) throw "Missing entity hash map";
-    if (!id) throw "Missing ID";
+    // Handle missing inputs
+    if (!file) throw "Clone entity error: Missing file";
+    if (!entitiesHash) throw "Clone entity error: Missing entity hash map";
+    if (!id) throw "Clone entity error: Missing ID";
 
+    // Find the entity in the hash set by ID, create a clone of it, and add it to the given file
     addEntityToFile(file, createEntityClone(findEntity(entitiesHash, id)));
 
     return file;
 }
 
+const cloneLinkedEntities = (hashSet, entitiesHash, file) => {
+    // Handle missing inputs
+    if (!file) throw "Clone linked entities error: Missing file";
+    if (!entitiesHash) throw "Clone linked entities error: Missing entity hash map";
+    if (!hashSet) throw "Clone linked entities error: Missing hash set";
+
+    // Iterate over the hash set containing linked entity IDs and clone each entity
+    hashSet.forEach(id => {
+        cloneEntity(file, entitiesHash, id);
+    });
+
+    return hashSet;
+};
+
 const convertToJson = (file) => {
     // Handle missing file
-    if (!file) throw "Missing file";
+    if (!file) throw "Convert to JSON error: Missing file";
 
-    // Convert file from JS Object back to JSON
+    // Convert file from JS Object back to JSON with proper spacing
     let JSONFile = JSON.stringify(file, null, 2);
 
-    // console.log(JSON.stringify(file, null, 2));
     return JSONFile;
 }
 
@@ -80,5 +94,6 @@ module.exports = {
     createEntityClone: createEntityClone,
     addEntityToFile: addEntityToFile,
     cloneEntity: cloneEntity,
+    cloneLinkedEntities: cloneLinkedEntities,
     convertToJson: convertToJson,
 }

@@ -1,20 +1,17 @@
-// Access Node File System
-const fs = require('fs');
+// Import File Methods
+const readFile = require("./fileMethods");
 
 // Import Entity Methods
-const Entities = require('./entityMethods');
+const Entities = require("./entityMethods");
 
 // Import Link Methods
-const Links = require('./linkMethods');
+const Links = require("./linkMethods");
 
 // Access and store JSON file through arguments array
 const file = process.argv.slice(2,3)[0];
 
 // Access and store entity ID parameter through arguments array
 const entityIdToSearch = process.argv.slice(3)[0];
-
-// Store parsed file globally
-let parsedFile = null;
 
 // Object storing every entity in file, indexed at each entity's unique ID.
 // Creating this hash to allow constant time lookup when searching for entities.
@@ -24,13 +21,9 @@ let storedEntities = {};
 let linkedEntityIds = new Set();
 
 const main = file => {
-    console.time("test");
-    fs.readFile(file, 'utf-8', (error, data) => {
-        if (error) throw error;
-        
-        // Store read file in global variable
-        parsedFile = JSON.parse(data);
-
+    // Call reaf file function to read and return file parsed into a javascript object
+    readFile(file)
+      .then(parsedFile => {
         // Copy all entities into a hash map for futute lookup
         Entities.createEntityHashMap(storedEntities, parsedFile);
 
@@ -38,18 +31,16 @@ const main = file => {
         Links.createLinkedEntitiesHashSet(parsedFile, entityIdToSearch, linkedEntityIds);
 
         // Clone all linked entities whose Ids exist in the hash set and add to file entities array
-        Links.cloneLinkedEntities(linkedEntityIds, storedEntities, parsedFile);
+        Entities.cloneLinkedEntities(linkedEntityIds, storedEntities, parsedFile);
 
         // Create the new links and add to file links array
         Links.createLinks(entityIdToSearch, parsedFile, linkedEntityIds);
 
-        console.log("Parsed File", parsedFile);
-
         // Return file parsed back into JSON format
-        Entities.convertToJson(parsedFile);
-        console.timeEnd("test");
-    })
+        // Using console.log to view results in terminal
+        console.log(Entities.convertToJson(parsedFile));
+      })
+      .catch(error => console.log(error));
 }
-    
+
 main(file);
-// console.log(main(file));
