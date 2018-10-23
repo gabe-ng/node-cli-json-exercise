@@ -1,10 +1,31 @@
 const Entities = require("./entityMethods");
-const exampleData = require("./testHelper");
 
-let hashmap = exampleData.hashmap;
-let hashset = exampleData.hashset;
-let fileData = exampleData.file;
+let hashMap = {};
+let hashSet = new Set();
+let testId = 2;
+let exampleFile = {
+    "entities": [
+        { "entity_id": 1, "name": "EntityA" },
+        { "entity_id": 2, "name": "EntityB" },
+        { "entity_id": 3, "name": "EntityC", }],
+    "links": [
+        { "from": 1, "to": 2 },
+        { "from": 1, "to": 3 }]
+}
 
-// test("the hash map is created", () => {
-//     expect(Entities.createEntityHashMap(hashmap, fileData)).toBeInstanceOf(Object);
-// })
+describe("createEntityHashMap function", () => {
+
+    test("should return an object", () => {
+        expect(Entities.createEntityHashMap(hashMap, exampleFile)).toBeInstanceOf(Object);
+    })
+
+    test("should create an instance for every entity", () => {
+        let keysArray = Object.keys(Entities.createEntityHashMap(hashMap, exampleFile));
+        expect(keysArray).toHaveLength(3)
+    })
+
+    test("should have the original entity mapped to its entity_id", () => {
+        let entity = { entity_id: 2, name: "EntityB" };
+        expect(Entities.createEntityHashMap(hashMap, exampleFile)[testId]).toMatchObject(entity);
+    })
+})
