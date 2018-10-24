@@ -74,10 +74,10 @@ const cloneLinkedEntities = (hashSet, entitiesHash, file) => {
         cloneEntity(file, entitiesHash, id);
     });
 
-    return hashSet;
+    return file;
 };
 
-const convertToJson = (file) => {
+const convertToJSON = (file) => {
     // Handle missing file
     if (!file) throw "Convert to JSON error: Missing file";
 
@@ -95,5 +95,5 @@ module.exports = {
     addEntityToFile: addEntityToFile,
     cloneEntity: cloneEntity,
     cloneLinkedEntities: cloneLinkedEntities,
-    convertToJson: convertToJson,
+    convertToJSON: convertToJSON,
 }

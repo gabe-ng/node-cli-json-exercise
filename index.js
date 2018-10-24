@@ -38,7 +38,7 @@ const main = file => {
 
         // Return file parsed back into JSON format
         // Using console.log to view results in terminal
-        console.log(Entities.convertToJson(parsedFile));
+        console.log(Entities.convertToJSON(parsedFile));
       })
       .catch(error => console.log(error));
 }
