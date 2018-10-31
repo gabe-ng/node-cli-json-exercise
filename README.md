@@ -1,7 +1,7 @@
 To run this program you must have Node.js installed on your system.
 
 ### Set Up
-Navigate to the project directory in your terminal and run `npm i` or `yarn i` to install Jest.
+Navigate to the project directory in your terminal and run `npm install` or `yarn install` to install Jest.
 
 
 ### Running the Program
